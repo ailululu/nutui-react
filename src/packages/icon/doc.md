@@ -7,7 +7,10 @@
 ### 安装
 
 ``` javascript
+// react
 import { Icon } from '@nutui/nutui-react';
+// taro
+import { Icon } from '@nutui/nutui-react-taro';
 ```
 
 ## 代码演示
@@ -160,6 +163,6 @@ export default App;
 
 ### Events
 
-| 事件名 | 说明           | 回调参数     |
-|--------|----------------|--------------|
-| click  | 点击图标时触发 | event: Event |
+| 事件名           | 说明           | 回调参数     |
+|---------------|----------------|--------------|
+| onClick`v1.3.8` | 点击图标时触发 | event: Event |

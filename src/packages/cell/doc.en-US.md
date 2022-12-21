@@ -6,8 +6,11 @@ The cell is a single display item in the list.
 
 ### Install
 
-```javascript
+```ts
+// react
 import { Cell, CellGroup } from '@nutui/nutui-react'
+// taro
+import { Cell, CellGroup } from '@nutui/nutui-react-taro'
 ```
 
 ## Demo
@@ -32,7 +35,7 @@ const App = () => {
       <Cell title="Title" subTitle="Subtitle Description" desc="Description" />
       <Cell
         title="Click Test"
-        click={(
+        onClick={(
           event: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
         ) => testClick(event)}
       />
@@ -288,4 +291,6 @@ export default App
 
 | Event | Description                  | Arguments   |
 |-------|------------------------------|-------------|
-| click | Emitted when cell is clicked | event: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent> |
+| click`v1.3.8废弃` | Emitted when cell is clicked | event: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent> |
+| onClick`v1.3.8` | Emitted when cell is clicked | event: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent> |
+

@@ -6,7 +6,12 @@
 
 ### 安装
 
-`import { Collapse,CollapseItem } from 'nutui-react'`
+```ts
+// react
+import { Collapse,CollapseItem } from 'nutui-react'
+// taro
+import { Collapse,CollapseItem } from 'nutui-react-taro'
+```
 
 
 ## 代码演示
@@ -269,4 +274,5 @@ const App = () => {
 
 | 事件名 | 说明           | 回调参数     |
 |--------|----------------|--------------|
-| change  | 切换面板时触发 | isOpen:是否打开状态；name：当前点击的name值 |
+| change`废弃`  | 切换面板时触发 | isOpen:是否打开状态；name：当前点击的name值 |
+| onChange`v1.3.8`  | 切换面板时触发 | isOpen:是否打开状态；name：当前点击的name值 |

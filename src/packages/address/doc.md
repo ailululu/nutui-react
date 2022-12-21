@@ -7,7 +7,10 @@
 
 ### 安装
 ``` javascript
+// react
 import { Address } from '@nutui/nutui-react';
+// taro
+import { Address } from '@nutui/nutui-react-taro';
 ```
 
 ## 代码示例
@@ -612,6 +615,8 @@ export default App;
   * townName 乡/镇的名字
   * addressDetail 具体地址
   * selectedAddress 字段用于判断当前地址列表的选中项。
+
+注：Nutui-React-Taro 下，自 `v1.3.10` 起 type 属性暂不支持 custom2 类型
 
 ## Event
 | 字段 | 说明 | 回调参数 |

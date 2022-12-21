@@ -7,7 +7,10 @@
 ### 安装
 
 ```ts
+// react
 import { Steps } from '@nutui/nutui-react';
+// taro
+import { Steps } from '@nutui/nutui-react-taro';
 ```
 
 ### 基本用法
@@ -259,7 +262,8 @@ export default App;
 
 | 事件名 | 说明           | 回调参数     |
 |--------|----------------|--------------|
-| clickStep  | 点击步骤的标题或图标时触发 | index: number |
+| clickStep `v1.3.8废弃` | 点击步骤的标题或图标时触发 | index: number |
+| onClickStep `v1.3.8`  | 点击步骤的标题或图标时触发 | index: number |
 
 #### Step
 

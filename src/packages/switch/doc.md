@@ -7,7 +7,10 @@
 ### 安装
 
 ```ts
+// react
 import { Switch } from '@nutui/nutui-react';
+// taro
+import { Switch } from '@nutui/nutui-react-taro';
 ```
 
 ## 代码演示
@@ -51,7 +54,7 @@ export default App;
 ```
 :::
 
-### change事件
+### onChange事件
 
 :::demo
 ```tsx
@@ -59,12 +62,12 @@ import  React from "react";
 import { Switch } from '@nutui/nutui-react';
 
 const App = () => {
-  const change = (value: boolean, event: Event) => {
-    alert(`触发了change事件，开关状态：${value}`)
+  const onChange = (value: boolean, event: Event) => {
+    alert(`触发了onChange事件，开关状态：${value}`)
   }
   return ( 
     <>   
-    <Switch change={(value, event) => change(value, event)} />
+    <Switch onChange={(value, event) => onChange(value, event)} />
     </>
   );
 };  
@@ -82,7 +85,7 @@ import { Switch } from '@nutui/nutui-react';
 const App = () => {
   const [checkedAsync, setCheckedAsync] = useState(true)
   
-  const changeAsync = (value: boolean, event: Event) => {
+  const onChangeAsync = (value: boolean, event: Event) => {
     alert(`2秒后异步触发 ${value}`)
     setTimeout(() => {
       setCheckedAsync(value)
@@ -93,7 +96,7 @@ const App = () => {
     <Switch
       checked={checkedAsync}
       isAsync
-      change={(value, event) => changeAsync(value, event)}
+      onChange={(value, event) => onChangeAsync(value, event)}
      />
     </>
   );
@@ -161,4 +164,4 @@ export default App;
 
 | 事件名 | 说明           | 回调参数                      |
 |--------|----------------|-------------------------------|
-| change | 切换开关时触发 | (value: boolean,event: Event) |
+| onChange `v1.3.8` | 切换开关时触发 | (value: boolean,event: Event) |

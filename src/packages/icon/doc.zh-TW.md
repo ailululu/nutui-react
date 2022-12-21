@@ -7,7 +7,10 @@
 ### 安裝
 
 ``` javascript
+// react
 import { Icon } from '@nutui/nutui-react';
+// taro
+import { Icon } from '@nutui/nutui-react-taro';
 ```
 
 ## 代碼演示
@@ -165,4 +168,4 @@ export default App;
 
 | 事件名稱 | 說明           | 回調參數     |
 |--------|----------------|--------------|
-| click  | 點擊圖示時觸發 | event: Event |
+| onClick`v1.3.8`  | 點擊圖示時觸發 | event: Event |

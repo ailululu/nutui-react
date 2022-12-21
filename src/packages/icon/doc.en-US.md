@@ -7,7 +7,10 @@ Icon set based on IconFont fonts, which can be used through the Icon component.
 ### Install
 
 ``` javascript
+// react
 import { Icon } from '@nutui/nutui-react';
+// taro
+import { Icon } from '@nutui/nutui-react-taro';
 ```
 
 ## Demo
@@ -166,4 +169,4 @@ export default App;
 
 | Event | Description           | callback parameters |
 |-------|----------------|---------------------|
-| click | Triggered when the icon is tapped | event: Event        |
+| onClick`v1.3.8` | Triggered when the icon is tapped | event: Event        |

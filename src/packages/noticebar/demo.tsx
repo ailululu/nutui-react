@@ -63,16 +63,18 @@ const NoticeBarDemo = () => {
         <NoticeBar text={translated.text} scrollable={false} />
 
         <h2>{translated.mode}</h2>
-        <NoticeBar closeMode click={hello}>
+        <NoticeBar closeMode onClick={hello}>
           {translated.text}
         </NoticeBar>
         <br />
-        <NoticeBar closeMode rightIcon="circle-close" click={hello}>
+        <NoticeBar closeMode rightIcon="circle-close" onClick={hello}>
           {translated.text}
         </NoticeBar>
         <br />
         <NoticeBar leftIcon="https://img13.360buyimg.com/imagetools/jfs/t1/72082/2/3006/1197/5d130c8dE1c71bcd6/e48a3b60804c9775.png">
-          <a href="https://www.jd.com">{translated.jd}</a>
+          <a href="https://www.jd.com" style={{ color: '#4d88ff' }}>
+            {translated.jd}
+          </a>
         </NoticeBar>
 
         <h2>{translated.multiline}</h2>
@@ -85,8 +87,9 @@ const NoticeBarDemo = () => {
             list={horseLamp1}
             speed={10}
             standTime={1000}
-            click={(item: any) => {
-              go(item)
+            height={30}
+            onClick={(e) => {
+              go(e.target.innerHTML)
             }}
             closeMode
           />
@@ -110,8 +113,12 @@ const NoticeBarDemo = () => {
             height={50}
             speed={10}
             standTime={1000}
-            click={(item: any) => {
-              go(item)
+            closeMode
+            onClose={() => {
+              console.log('close')
+            }}
+            onClick={(e) => {
+              console.log(e)
             }}
           >
             {horseLamp3.map((item, index) => {

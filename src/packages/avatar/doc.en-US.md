@@ -6,7 +6,10 @@ Avatars can be used to represent people or objects. It supports images, Icons, o
 
 ### Install
 ``` ts
+// react
 import { Avatar } from '@nutui/nutui-react';
+// taro
+import { Avatar } from '@nutui/nutui-react-taro';
 ```
 ### Basic usage
 
@@ -191,7 +194,7 @@ const App = () => {
   }
   return (
     <>
-      <Avatar icon="my" activeAvatar={activeAvatar} />
+      <Avatar icon="my" onActiveAvatar={activeAvatar} />
     </>
   )
 }
@@ -210,6 +213,7 @@ export default App;
 | url      | The address of the image for an image avatar or image element       | String | -   |
 | alt      | This attribute defines the alternative text describing the image    | String | -   |
 | icon     | Custom icon type for an icon avatar, Refer to the name attribute of Icon component  | String | -     |
+| iconSize`v1.3.11`     | [Icon size](#/icon) | String、Number | `16`             |
 
 ### avatarGroup
 | Attribute     | Description                                                 | Type   | Default |
@@ -226,5 +230,6 @@ export default App;
 
 | Event            | Description    | Type     | Arguments |
 | ---------------- | ------------ | -------- | -------- |
-| activeAvatar | Emitted when cell is clicked    | Function | event    |
+| activeAvatar `v1.3.8(Abandon)` | Emitted when cell is clicked    | Function | event    |
+| onActiveAvatar `v1.3.8` | Emitted when cell is clicked    | Function | event    |
 | onError       | Handler when img load error   | Function | event    |

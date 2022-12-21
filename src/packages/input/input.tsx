@@ -8,13 +8,15 @@ import React, {
   useLayoutEffect,
   MouseEvent,
   HTMLInputTypeAttribute,
+  forwardRef,
+  useImperativeHandle,
 } from 'react'
 
 import { formatNumber } from './util'
 import Icon from '@/packages/icon'
 import { useConfig } from '@/packages/configprovider'
 
-import { IComponent, ComponentDefaults } from '@/utils/typings'
+import { BasicComponent, ComponentDefaults } from '@/utils/typings'
 
 export type InputAlignType = 'left' | 'center' | 'right' // text-align
 export type InputFormatTrigger = 'onChange' | 'onBlur' // onChange: 在输入时执行格式化 ; onBlur: 在失焦时执行格式化
@@ -28,8 +30,9 @@ export type InputRule = {
 
 export type ConfirmTextType = 'send' | 'search' | 'next' | 'go' | 'done'
 
-export interface InputProps extends IComponent {
+export interface InputProps extends BasicComponent {
   type: InputType
+  name: string
   defaultValue: any
   placeholder: string
   label: string
@@ -68,16 +71,25 @@ export interface InputProps extends IComponent {
   blur?: (value: any, event: Event) => void
   focus?: (value: any, event: Event) => void
   clear?: (value: any, event: Event) => void
-  keypress?: (value: any, event: Event) => void
   clickInput?: (value: any) => void
   clickLeftIcon?: (value: any) => void
   clickRightIcon?: (value: any) => void
   click?: (value: any) => void
+  onChange?: (value: any, event: Event) => void
+  onBlur?: (value: any, event: Event) => void
+  onFocus?: (value: any, event: Event) => void
+  onClear?: (value: any, event: Event) => void
+  keypress?: (value: any, event: Event) => void
+  onClickInput?: (value: any) => void
+  onClickLeftIcon?: (value: any) => void
+  onClickRightIcon?: (value: any) => void
+  onClick?: (value: any) => void
 }
 
 const defaultProps = {
   ...ComponentDefaults,
   type: 'text',
+  name: '',
   defaultValue: '',
   placeholder: '',
   label: '',
@@ -112,12 +124,17 @@ const defaultProps = {
 } as unknown as InputProps
 
 export const Input: FunctionComponent<
-  Partial<InputProps> & React.HTMLAttributes<HTMLDivElement>
-> = (props) => {
+  Partial<InputProps> &
+    Omit<
+      React.HTMLAttributes<HTMLDivElement>,
+      'onChange' | 'onBlur' | 'onFocus' | 'onClick'
+    >
+> = forwardRef((props, ref) => {
   const { locale } = useConfig()
   const {
     children,
     type,
+    name,
     defaultValue,
     placeholder,
     label,
@@ -151,12 +168,20 @@ export const Input: FunctionComponent<
     rows,
     slotButton,
     slotInput,
+    onChange,
+    onBlur,
+    onFocus,
+    onClear,
+    formatter,
+    keypress,
+    onClickInput,
+    onClickLeftIcon,
+    onClickRightIcon,
+    onClick,
     change,
     blur,
     focus,
     clear,
-    formatter,
-    keypress,
     clickInput,
     clickLeftIcon,
     clickRightIcon,
@@ -186,9 +211,7 @@ export const Input: FunctionComponent<
   })
   useEffect(() => {
     setClasses(inputClass)
-    if (defaultValue) {
-      SetInputValue(defaultValue)
-    }
+    SetInputValue(defaultValue)
   }, [defaultValue])
 
   useEffect(() => {
@@ -197,6 +220,10 @@ export const Input: FunctionComponent<
       resetValidation()
     }
   }, [inputValue])
+
+  useImperativeHandle(ref, () => {
+    return inputRef.current
+  })
 
   const inputClass = useCallback(() => {
     const prefixCls = 'nut-input'
@@ -246,23 +273,25 @@ export const Input: FunctionComponent<
     // }
   }
 
-  const onFocus = (event: Event) => {
+  const handleFocus = (event: Event) => {
     const val: any = (event.target as any).value
     SetActive(true)
+    onFocus && onFocus(val, event)
     focus && focus(val, event)
   }
 
-  const onInput = (event: Event) => {
+  const handleInput = (event: Event) => {
     let val: any = (event.target as any).value
 
     if (maxlength && val.length > Number(maxlength)) {
       val = val.slice(0, Number(maxlength))
     }
     updateValue(val)
+    onChange && onChange(val, event)
     change && change(val, event)
   }
 
-  const onBlur = (event: Event) => {
+  const handleBlur = (event: Event) => {
     setTimeout(() => {
       SetActive(false)
     }, 200)
@@ -271,17 +300,21 @@ export const Input: FunctionComponent<
       val = val.slice(0, Number(maxlength))
     }
     updateValue(getModelValue(), 'onBlur')
+    onBlur && onBlur(val, event)
     blur && blur(val, event)
   }
 
-  const onClickInput = (event: MouseEvent) => {
+  const handleClickInput = (event: MouseEvent) => {
+    onClickInput && onClickInput(event)
     clickInput && clickInput(event)
   }
-  const onClickLeftIcon = (event: MouseEvent) => {
+  const handleClickLeftIcon = (event: MouseEvent) => {
+    onClickLeftIcon && onClickLeftIcon(event)
     clickLeftIcon && clickLeftIcon(event)
   }
 
-  const onClickRightIcon = (event: MouseEvent) => {
+  const handleClickRightIcon = (event: MouseEvent) => {
+    onClickRightIcon && onClickRightIcon(event)
     clickRightIcon && clickRightIcon(event)
   }
 
@@ -304,6 +337,7 @@ export const Input: FunctionComponent<
 
   const handleClear = (event: Event) => {
     updateValue('')
+    onClear && onClear('', event)
     clear && clear('', event)
   }
 
@@ -313,25 +347,28 @@ export const Input: FunctionComponent<
       style={style}
       {...rest}
       onClick={(e) => {
+        onClick && onClick(e)
         click && click(e)
       }}
     >
       {slotInput ? (
         <>
-          <div
-            className={`nut-input-label ${labelClass}`}
-            style={{ width: `${labelWidth}px`, textAlign: labelAlign }}
-          >
-            <div className="label-string">
-              {label}
-              {colon ? ':' : ''}
+          {label ? (
+            <div
+              className={`nut-input-label ${labelClass}`}
+              style={{ width: `${labelWidth}px`, textAlign: labelAlign }}
+            >
+              <div className="label-string">
+                {label}
+                {colon ? ':' : ''}
+              </div>
             </div>
-          </div>
+          ) : null}
           <div className="nut-input-value">
             <div
               className="nut-input-inner"
               onClick={(e) => {
-                onClickInput(e)
+                handleClickInput(e)
               }}
             >
               {slotInput}
@@ -344,7 +381,7 @@ export const Input: FunctionComponent<
             <div
               className="nut-input-left-icon"
               onClick={(e) => {
-                onClickLeftIcon(e)
+                handleClickLeftIcon(e)
               }}
             >
               <Icon
@@ -355,24 +392,27 @@ export const Input: FunctionComponent<
               />
             </div>
           ) : null}
-          <div
-            className={`nut-input-label ${labelClass}`}
-            style={{ width: `${labelWidth}px`, textAlign: labelAlign }}
-          >
-            <div className="label-string">
-              {label}
-              {colon ? ':' : ''}
+          {label ? (
+            <div
+              className={`nut-input-label ${labelClass}`}
+              style={{ width: `${labelWidth}px`, textAlign: labelAlign }}
+            >
+              <div className="label-string">
+                {label}
+                {colon ? ':' : ''}
+              </div>
             </div>
-          </div>
+          ) : null}
           <div className="nut-input-value">
             <div
               className="nut-input-inner"
               onClick={(e) => {
-                onClickInput(e)
+                handleClickInput(e)
               }}
             >
               {type === 'textarea' ? (
                 <textarea
+                  name={name}
                   className="input-text"
                   ref={inputRef}
                   style={{
@@ -386,17 +426,18 @@ export const Input: FunctionComponent<
                   value={inputValue}
                   autoFocus={autofocus}
                   onBlur={(e: any) => {
-                    onBlur(e)
+                    handleBlur(e)
                   }}
                   onFocus={(e: any) => {
-                    onFocus(e)
+                    handleFocus(e)
                   }}
                   onInput={(e: any) => {
-                    onInput(e)
+                    handleInput(e)
                   }}
                 />
               ) : (
                 <input
+                  name={name}
                   className="input-text"
                   ref={inputRef}
                   style={{ textAlign: inputAlign }}
@@ -408,13 +449,13 @@ export const Input: FunctionComponent<
                   value={inputValue}
                   autoFocus={autofocus}
                   onBlur={(e: any) => {
-                    onBlur(e)
+                    handleBlur(e)
                   }}
                   onFocus={(e: any) => {
-                    onFocus(e)
+                    handleFocus(e)
                   }}
                   onInput={(e: any) => {
-                    onInput(e)
+                    handleInput(e)
                   }}
                 />
               )}
@@ -434,7 +475,7 @@ export const Input: FunctionComponent<
                 <div
                   className="nut-input-right-icon"
                   onClick={(e) => {
-                    onClickRightIcon(e)
+                    handleClickRightIcon(e)
                   }}
                 >
                   <Icon
@@ -472,7 +513,7 @@ export const Input: FunctionComponent<
       )}
     </div>
   )
-}
+})
 
 Input.defaultProps = defaultProps
 Input.displayName = 'NutInput'

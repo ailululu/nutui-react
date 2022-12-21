@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useTranslate } from '@/sites/assets/locale/taro'
 import { InputNumber, Cell, Toast } from '@/packages/nutui.react.taro'
 
-interface IValState {
+interface ValState {
   val1: number | string
   val2: number | string
   val3: number | string
@@ -65,7 +65,7 @@ const InputNumberDemo = () => {
     },
   })
 
-  const [inputState, setInputState] = useState<IValState>({
+  const [inputState, setInputState] = useState<ValState>({
     val1: 1,
     val2: 0,
     val3: 10,
@@ -115,7 +115,7 @@ const InputNumberDemo = () => {
             modelValue={inputState.val3}
             min="10"
             max="20"
-            overlimit={overlimit}
+            onOverlimit={overlimit}
           />
         </Cell>
         <h2>{translated['181965e2']}</h2>
@@ -137,7 +137,11 @@ const InputNumberDemo = () => {
         </Cell>
         <h2>{translated['65bafb1d']}</h2>
         <Cell>
-          <InputNumber modelValue={inputState.val7} change={onChange} isAsync />
+          <InputNumber
+            modelValue={inputState.val7}
+            onChangeFuc={onChange}
+            isAsync
+          />
         </Cell>
         <h2>{translated['7e2394ae']}</h2>
         <Cell>

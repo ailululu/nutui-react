@@ -10,12 +10,12 @@ import Icon from '@/packages/icon'
 import RadioContext from './context'
 import RadioGroup from '@/packages/radiogroup'
 
-import { IComponent, ComponentDefaults } from '@/utils/typings'
+import { BasicComponent, ComponentDefaults } from '@/utils/typings'
 
 type Shape = 'button' | 'round'
 type Position = 'right' | 'left'
 
-export interface RadioProps extends IComponent {
+export interface RadioProps extends BasicComponent {
   className: string
   style: React.CSSProperties
   disabled: boolean
@@ -125,9 +125,19 @@ export const Radio: FunctionComponent<
       return renderButton()
     }
     if (reverseState) {
-      return [renderLabel(), renderIcon()]
+      return (
+        <>
+          {renderLabel()}
+          {renderIcon()}
+        </>
+      )
     }
-    return [renderIcon(), renderLabel()]
+    return (
+      <>
+        {renderIcon()}
+        {renderLabel()}
+      </>
+    )
   }
   const handleClick: MouseEventHandler<HTMLDivElement> = (e) => {
     if (disabledStatement || checkedStatement) return

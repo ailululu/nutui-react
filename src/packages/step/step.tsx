@@ -4,9 +4,9 @@ import { DataContext } from '@/packages/steps/UserContext'
 import bem from '@/utils/bem'
 import Icon from '@/packages/icon'
 
-import { IComponent, ComponentDefaults } from '@/utils/typings'
+import { BasicComponent, ComponentDefaults } from '@/utils/typings'
 
-export interface StepProps extends IComponent {
+export interface StepProps extends BasicComponent {
   title: string
   content: string
   activeIndex: number
@@ -56,9 +56,8 @@ export const Step: FunctionComponent<
     return index === +parent.propSteps.current ? 'process' : 'wait'
   }
   const handleClickStep = () => {
-    if (parent.propSteps?.clickStep) {
-      parent.propSteps?.clickStep(activeIndex)
-    }
+    parent.propSteps?.onClickStep && parent.propSteps?.onClickStep(activeIndex)
+    parent.propSteps?.clickStep && parent.propSteps?.clickStep(activeIndex)
   }
 
   const b = bem('step')

@@ -24,6 +24,9 @@ export interface RangeProps {
   hiddenTag: boolean
   min: number | string
   max: number | string
+  minDesc: number | string
+  maxDesc: number | string
+  curValueDesc: number | string
   step: number | string
   modelValue: SliderValue
   button: React.ReactNode
@@ -32,6 +35,9 @@ export interface RangeProps {
   change?: (value: number) => void
   dragStart?: () => void
   dragEnd?: () => void
+  onChange?: (value: number) => void
+  onDragStart?: () => void
+  onDragEnd?: () => void
 }
 const defaultProps = {
   range: false,
@@ -49,7 +55,8 @@ let startValue: any
 let currentValue: any
 
 export const Range: FunctionComponent<
-  Partial<RangeProps> & Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'>
+  Partial<RangeProps> &
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick' | 'onChange'>
 > = (props) => {
   const { locale } = useConfig()
   const {
@@ -68,6 +75,12 @@ export const Range: FunctionComponent<
     change,
     dragStart,
     dragEnd,
+    onChange,
+    onDragStart,
+    onDragEnd,
+    minDesc,
+    maxDesc,
+    curValueDesc,
   } = { ...defaultProps, ...props }
 
   let { min, max, step } = { ...defaultProps, ...props }
@@ -272,6 +285,7 @@ export const Range: FunctionComponent<
 
     if ((marks || end) && !isSameValue(value, startValue)) {
       change && change(value)
+      onChange && onChange(value)
     }
   }
 
@@ -281,10 +295,10 @@ export const Range: FunctionComponent<
     }
     SetDragStatus('')
     const rect = await getRectByTaro(root.current)
-    let delta = event.detail.x - rect.left
+    let delta = (event.detail.x ? event.detail.x : event.clientX) - rect.left
     let total = rect.width
     if (vertical) {
-      delta = event.detail.y - rect.top
+      delta = (event.detail.y ? event.detail.y : event.clientY) - rect.top
       total = rect.height
     }
     const value = Number(min) + (delta / total) * scope()
@@ -323,6 +337,7 @@ export const Range: FunctionComponent<
     }
     if (dragStatus === 'start') {
       dragStart && dragStart()
+      onDragStart && onDragStart()
     }
 
     touch.move(event)
@@ -355,6 +370,7 @@ export const Range: FunctionComponent<
     if (dragStatus === 'draging') {
       updateValue(currentValue, true)
       dragEnd && dragEnd()
+      onDragEnd && onDragEnd()
     }
     SetDragStatus('')
   }
@@ -367,7 +383,7 @@ export const Range: FunctionComponent<
 
   return (
     <div className={`${containerName}`}>
-      {!hiddenRange ? <div className="min">{+min}</div> : null}
+      {!hiddenRange ? <div className="min">{minDesc || +min}</div> : null}
       <div
         ref={root}
         style={wrapperStyle()}
@@ -432,7 +448,9 @@ export const Range: FunctionComponent<
                   {button || (
                     <div className="nut-range-button" style={buttonStyle()}>
                       {!hiddenTag ? (
-                        <div className="number">{curValue(index)}</div>
+                        <div className="number">
+                          {curValueDesc || curValue(index)}
+                        </div>
                       ) : null}
                     </div>
                   )}
@@ -467,7 +485,7 @@ export const Range: FunctionComponent<
               {button || (
                 <div className="nut-range-button" style={buttonStyle()}>
                   {!hiddenTag ? (
-                    <div className="number">{curValue()}</div>
+                    <div className="number">{curValueDesc || curValue()}</div>
                   ) : null}
                 </div>
               )}
@@ -475,7 +493,7 @@ export const Range: FunctionComponent<
           )}
         </div>
       </div>
-      {!hiddenRange ? <div className="max">{+max}</div> : null}
+      {!hiddenRange ? <div className="max">{maxDesc || +max}</div> : null}
       <Toast
         type="text"
         visible={show}

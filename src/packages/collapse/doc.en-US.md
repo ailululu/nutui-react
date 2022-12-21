@@ -6,7 +6,12 @@ Place the content in multiple folded panels, and click the panel title to expand
 
 ### Install
 
-`import { Collapse,CollapseItem } from 'nutui-react'`
+```ts
+// react
+import { Collapse,CollapseItem } from 'nutui-react'
+// taro
+import { Collapse,CollapseItem } from 'nutui-react-taro'
+```
 
 
 ## Code demonstration
@@ -259,4 +264,5 @@ Non accordion mode：(string | number)[] | - |
 
 | Attribute | Description  | Callback Arguments     |
 |--------|----------------|--------------|
-| change  | Triggered when the panel is switched | isOpen:Whether it is open status；name：Name value currently clicked |
+| change`abandon`  | Triggered when the panel is switched | isOpen:Whether it is open status；name：Name value currently clicked |
+| onChange`v1.3.8`  | Triggered when the panel is switched | isOpen:Whether it is open status；name：Name value currently clicked |

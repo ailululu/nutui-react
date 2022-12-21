@@ -1,18 +1,24 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, {
+  forwardRef,
+  FunctionComponent,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react'
 import classnames from 'classnames'
 import { CSSTransition } from 'react-transition-group'
 import { useConfig } from '@/packages/configprovider'
 import Icon from '@/packages/icon'
 import { Overlay } from '../overlay/overlay'
 
-import { IComponent, ComponentDefaults } from '@/utils/typings'
+import { BasicComponent, ComponentDefaults } from '@/utils/typings'
 
 export interface OptionItem {
   text: string
   value: string | number
 }
 
-export interface MenuItemProps extends IComponent {
+export interface MenuItemProps extends BasicComponent {
   className: string
   style: React.CSSProperties
   title: React.ReactNode
@@ -43,11 +49,10 @@ const defaultProps = {
   fontClassName: 'nutui-iconfont',
   onChange: (value: OptionItem) => undefined,
 } as MenuItemProps
-export const MenuItem: FunctionComponent<Partial<MenuItemProps>> = (props) => {
+export const MenuItem = forwardRef((props: Partial<MenuItemProps>, ref) => {
   const { locale } = useConfig()
   const mergedProps = { ...defaultProps, ...props }
   const {
-    className,
     style,
     options,
     value,
@@ -76,6 +81,10 @@ export const MenuItem: FunctionComponent<Partial<MenuItemProps>> = (props) => {
     getParentOffset()
   }, [_showPopup])
 
+  useImperativeHandle<any, any>(ref, () => ({
+    toggle: parent.toggleItemShow,
+  }))
+
   const getIconCName = (optionVal: string | number, value: string | number) => {
     return classnames({
       [activeTitleClass]: optionVal === value,
@@ -101,7 +110,6 @@ export const MenuItem: FunctionComponent<Partial<MenuItemProps>> = (props) => {
     setTimeout(() => {
       const p = parent.parent().current
       const rect = p.getBoundingClientRect()
-      console.log(rect, p.offsetTop, window.screenTop)
       setPosition({
         height: rect.height,
         top: rect.top,
@@ -140,7 +148,7 @@ export const MenuItem: FunctionComponent<Partial<MenuItemProps>> = (props) => {
       <div
         className={`placeholder-element ${classnames({
           up: direction === 'up',
-        })} ${className}`}
+        })}`}
         style={placeholderStyle()}
         onClick={() => parent.toggleItemShow(orderKey)}
       />
@@ -155,13 +163,21 @@ export const MenuItem: FunctionComponent<Partial<MenuItemProps>> = (props) => {
         }}
       />
       <div
-        className="nut-menu-item__wrap"
+        className={
+          direction === 'down'
+            ? 'nut-menu-item__wrap'
+            : 'nut-menu-item__wrap-up'
+        }
         style={{
-          ...getPosition(),
+          // ...getPosition(),
           ...isShow(),
         }}
       >
-        <CSSTransition in={_showPopup} timeout={100} classNames="menu-item">
+        <CSSTransition
+          in={_showPopup}
+          timeout={100}
+          classNames={direction === 'down' ? 'menu-item' : 'menu-item-up'}
+        >
           <div className="nut-menu-item__content">
             {options?.map((item, index) => {
               return (
@@ -203,7 +219,7 @@ export const MenuItem: FunctionComponent<Partial<MenuItemProps>> = (props) => {
       </div>
     </>
   )
-}
+})
 
 MenuItem.defaultProps = defaultProps
 MenuItem.displayName = 'NutMenuItem'

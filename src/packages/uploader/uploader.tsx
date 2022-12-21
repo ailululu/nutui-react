@@ -21,9 +21,9 @@ export type FileItemStatus =
   | 'error'
   | 'removed'
 
-import { IComponent, ComponentDefaults } from '@/utils/typings'
+import { BasicComponent, ComponentDefaults } from '@/utils/typings'
 
-export interface UploaderProps extends IComponent {
+export interface UploaderProps extends BasicComponent {
   url: string
   maximum: string | number
   maximize: number
@@ -532,14 +532,17 @@ const InternalUploader: ForwardRefRenderFunction<
                     />
                     &nbsp;{item.name}
                   </div>
-                  <Icon
-                    classPrefix={iconClassPrefix}
-                    fontClassName={iconFontClassName}
-                    color="#808080"
-                    className="nut-uploader__preview-img__file__del"
-                    name="del"
-                    onClick={() => onDelete(item, index)}
-                  />
+                  {isDeletable && (
+                    <Icon
+                      classPrefix={iconClassPrefix}
+                      fontClassName={iconFontClassName}
+                      color="#808080"
+                      className="nut-uploader__preview-img__file__del"
+                      name="del"
+                      onClick={() => onDelete(item, index)}
+                    />
+                  )}
+
                   {item.status === 'uploading' && (
                     <Progress
                       size="small"

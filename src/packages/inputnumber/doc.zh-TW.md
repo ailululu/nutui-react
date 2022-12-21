@@ -5,9 +5,11 @@
 通過點擊按鈕控制數字增減。
 
 ### 安裝
-
 ``` ts
+// react
 import { InputNumber } from '@nutui/nutui-react';
+// taro
+import { InputNumber } from '@nutui/nutui-react-taro';
 ```
 ### 基礎用法
 
@@ -20,18 +22,11 @@ import { InputNumber } from '@nutui/nutui-react';
 
 const App = () => {
   const [inputState, setInputState] = useState({
-    val1: 1,
-    val2: 0,
-    val3: 10,
-    val4: 0,
-    val5: 1,
-    val6: 5.5,
-    val7: 1,
-    val8: 1,
+    val: 1,
   })
   return (
     <>
-      <InputNumber modelValue={inputState.val1} />
+      <InputNumber modelValue={inputState.val} />
     </>
   )
 }
@@ -50,18 +45,11 @@ import { InputNumber } from '@nutui/nutui-react';
 
 const App = () => {
   const [inputState, setInputState] = useState({
-    val1: 1,
-    val2: 0,
-    val3: 10,
-    val4: 0,
-    val5: 1,
-    val6: 5.5,
-    val7: 1,
-    val8: 1,
+    val: 0,
   })
   return (
     <>
-      <InputNumber modelValue={inputState.val2} step="5" />
+      <InputNumber modelValue={inputState.val} step="5" />
     </>
   )
 }
@@ -80,14 +68,7 @@ import { InputNumber } from '@nutui/nutui-react';
 
 const App = () => {
   const [inputState, setInputState] = useState({
-    val1: 1,
-    val2: 0,
-    val3: 10,
-    val4: 0,
-    val5: 1,
-    val6: 5.5,
-    val7: 1,
-    val8: 1,
+    val: 10,
   })
   const overlimit = (e: MouseEvent) => {
     console.log(e)
@@ -95,7 +76,7 @@ const App = () => {
   }
   return (
     <>
-      <InputNumber modelValue={inputState.val3} min="10" max="20" overlimit={overlimit} />
+      <InputNumber modelValue={inputState.val} min="10" max="20" onOverlimit={overlimit} />
     </>
   )
 }
@@ -114,18 +95,11 @@ import { InputNumber } from '@nutui/nutui-react';
 
 const App = () => {
   const [inputState, setInputState] = useState({
-    val1: 1,
-    val2: 0,
-    val3: 10,
-    val4: 0,
-    val5: 1,
-    val6: 5.5,
-    val7: 1,
-    val8: 1,
+    val: 0,
   })
   return (
     <>
-      <InputNumber modelValue={inputState.val4} disabled />
+      <InputNumber modelValue={inputState.val} disabled />
     </>
   )
 }
@@ -144,18 +118,11 @@ import { InputNumber } from '@nutui/nutui-react';
 
 const App = () => {
   const [inputState, setInputState] = useState({
-    val1: 1,
-    val2: 0,
-    val3: 10,
-    val4: 0,
-    val5: 1,
-    val6: 5.5,
-    val7: 1,
-    val8: 1,
+    val: 1,
   })
   return (
     <>
-      <InputNumber modelValue={inputState.val5} readonly />
+      <InputNumber modelValue={inputState.val} readonly />
     </>
   )
 }
@@ -174,18 +141,11 @@ import { InputNumber } from '@nutui/nutui-react';
 
 const App = () => {
   const [inputState, setInputState] = useState({
-    val1: 1,
-    val2: 0,
-    val3: 10,
-    val4: 0,
-    val5: 1,
-    val6: 5.5,
-    val7: 1,
-    val8: 1,
+    val: 5.5,
   })
   return (
     <>
-      <InputNumber modelValue={inputState.val6} step="0.1" decimalPlaces="1" readonly />
+      <InputNumber modelValue={inputState.val} step="0.1" decimalPlaces="1" readonly />
     </>
   )
 }
@@ -203,14 +163,7 @@ import { InputNumber, Toast } from '@nutui/nutui-react';
 
 const App = () => {
   const [inputState, setInputState] = useState({
-    val1: 1,
-    val2: 0,
-    val3: 10,
-    val4: 0,
-    val5: 1,
-    val6: 5.5,
-    val7: 1,
-    val8: 1,
+    val: 1,
   })
   const onChange = (value: string | number) => {
     Toast.loading('異步演示 2 秒後更改')
@@ -222,7 +175,7 @@ const App = () => {
   }
   return (
     <>
-      <InputNumber modelValue={inputState.val7} change={onChange} isAsync />
+      <InputNumber modelValue={inputState.val} onChangeFuc={onChange} isAsync />
     </>
   )
 }
@@ -239,18 +192,11 @@ import { InputNumber, Toast } from '@nutui/nutui-react';
 
 const App = () => {
   const [inputState, setInputState] = useState({
-    val1: 1,
-    val2: 0,
-    val3: 10,
-    val4: 0,
-    val5: 1,
-    val6: 5.5,
-    val7: 1,
-    val8: 1,
+    val: 1,
   })
   return (
     <>
-      <InputNumber modelValue={inputState.val8} buttonSize="30" inputWidth="50" />
+      <InputNumber modelValue={inputState.val} buttonSize="30" inputWidth="50" />
     </>
   )
 }
@@ -279,9 +225,15 @@ export default App;
 
 | 事件名    | 說明                   | 回調參數                       |
 |-----------|------------------------|--------------------------------|
-| add       | 點擊增加按鈕時觸發     | event: Event                   |
-| reduce    | 點擊減少按鈕時觸發     | event: Event                   |
-| overlimit | 點擊不可用的按鈕時觸發 | event: Event                   |
-| change    | 值改變時觸發           | value:  number , event : Event |
-| blur      | 輸入框失去焦點時觸發   | event: Event                   |
-| focus     | 輸入框獲得焦點時觸發   | event: Event                   |
+| add `v1.3.8廢棄`       | 點擊增加按鈕時觸發     | event: Event                   |
+| reduce `v1.3.8廢棄`    | 點擊減少按鈕時觸發     | event: Event                   |
+| overlimit `v1.3.8廢棄` | 點擊不可用的按鈕時觸發 | event: Event                   |
+| change `v1.3.8廢棄`    | 值改變時觸發           | value:  number , event : Event |
+| blur `v1.3.8廢棄`      | 輸入框失去焦點時觸發   | event: Event                   |
+| focus `v1.3.8廢棄`     | 輸入框獲得焦點時觸發   | event: Event                   |
+| onAdd `v1.3.8`       | 點擊增加按鈕時觸發     | event: Event                   |
+| onReduce `v1.3.8`    | 點擊減少按鈕時觸發     | event: Event                   |
+| onOverlimit `v1.3.8` | 點擊不可用的按鈕時觸發 | event: Event                   |
+| onChangeFuc `v1.3.8`    | 值改變時觸發           | value:  number , event : Event |
+| onBlurFuc `v1.3.8`      | 輸入框失去焦點時觸發   | event: Event                   |
+| onFocus `v1.3.8`     | 輸入框獲得焦點時觸發   | event: Event                   |

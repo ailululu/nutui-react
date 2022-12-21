@@ -7,7 +7,10 @@
 ### 安装
 
 ```javascript
+// react
 import { BackTop } from '@nutui/nutui-react';
+// taro
+import { BackTop } from '@nutui/nutui-react-taro';
 ```
 
 ## 代码演示
@@ -244,7 +247,7 @@ export default App;
 
 | 字段        | 说明                            | 类型    | 默认值 |
 | ----------- | ------------------------------- | ------- | ------ |
-| elId        | 获取监听元素的父级元素          | String  | -      |
+| elId        | 获取监听元素的父级元素         | String  | -      |
 | bottom      | 距离页面底部距离                | Number  | `20`   |
 | right       | 距离页面右侧距离                | Number  | `10`   |
 | distance    | 页面垂直滚动多高后出现          | Number  | `200`  |
